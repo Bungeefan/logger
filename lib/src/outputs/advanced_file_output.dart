@@ -182,8 +182,10 @@ class AdvancedFileOutput extends LogOutput {
           await _file.length() > _maxFileSizeKB * 1024) {
         // Rotate the log file
         await _closeSink();
-        await _file.rename('$_path/${_fileNameFormatter(DateTime.now())}');
+        await _file.copy('$_path/${_fileNameFormatter(DateTime.now())}');
         await _deleteRotatedFiles();
+        // Clear contents of "latest"
+        await _file.writeAsString("", mode: FileMode.write, flush: true);
         await _openSink();
       }
     } catch (e, s) {
