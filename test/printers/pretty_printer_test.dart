@@ -24,6 +24,19 @@ void main() {
     expect(actualLogString, contains(expectedMessage));
   });
 
+  test('should print a tag', () {
+    final expectedMessage = 'some message with a tag';
+    final printer = PrettyPrinter();
+
+    final event = LogEvent(Level.debug, expectedMessage,
+        error: 'some error', stackTrace: StackTrace.current, tag: 'SomeTag');
+
+    final actualLog = printer.log(event);
+    final actualLogString = readMessage(actualLog);
+    expect(actualLogString, contains('SomeTag'));
+    expect(actualLogString, contains(expectedMessage));
+  });
+
   test('should print custom emoji or fallback', () {
     final expectedMessage = 'some message with an emoji';
     final emojiPrettyPrinter = PrettyPrinter(

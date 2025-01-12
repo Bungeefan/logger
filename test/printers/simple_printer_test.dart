@@ -9,6 +9,7 @@ void main() {
     'some message',
     error: 'some error',
     stackTrace: StackTrace.current,
+    tag: 'SomeTag',
   );
 
   var plainPrinter = SimplePrinter(colors: false, printTime: false);
@@ -17,7 +18,7 @@ void main() {
     var outputs = plainPrinter.log(event);
 
     expect(outputs, hasLength(1));
-    expect(outputs[0], '[T]  some message  ERROR: some error');
+    expect(outputs[0], '[T]  [SomeTag]  some message  ERROR: some error');
   });
 
   group('color', () {
@@ -40,6 +41,12 @@ void main() {
     var printer = SimplePrinter(printTime: true);
 
     expect(printer.log(event)[0], contains('TIME'));
+  });
+
+  test('print tag', () {
+    var printer = SimplePrinter();
+
+    expect(printer.log(event)[0], contains('[SomeTag]'));
   });
 
   test('does not print time', () {

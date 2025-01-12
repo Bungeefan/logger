@@ -36,6 +36,7 @@ class Logger {
   final LogFilter _filter;
   final LogPrinter _printer;
   final LogOutput _output;
+  final String? _tag;
   bool _active = true;
 
   /// Create a new instance of Logger.
@@ -48,9 +49,11 @@ class Logger {
     LogPrinter? printer,
     LogOutput? output,
     Level? level,
+    String? tag,
   })  : _filter = filter ?? defaultFilter(),
         _printer = printer ?? defaultPrinter(),
-        _output = output ?? defaultOutput() {
+        _output = output ?? defaultOutput(),
+        _tag = tag {
     var filterInit = _filter.init();
     if (level != null) {
       _filter.level = level;
@@ -75,8 +78,9 @@ class Logger {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
+    String? tag,
   }) {
-    t(message, time: time, error: error, stackTrace: stackTrace);
+    t(message, time: time, error: error, stackTrace: stackTrace, tag: tag);
   }
 
   /// Log a message at level [Level.trace].
@@ -85,8 +89,10 @@ class Logger {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
+    String? tag,
   }) {
-    log(Level.trace, message, time: time, error: error, stackTrace: stackTrace);
+    log(Level.trace, message,
+        time: time, error: error, stackTrace: stackTrace, tag: tag);
   }
 
   /// Log a message at level [Level.debug].
@@ -95,8 +101,10 @@ class Logger {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
+    String? tag,
   }) {
-    log(Level.debug, message, time: time, error: error, stackTrace: stackTrace);
+    log(Level.debug, message,
+        time: time, error: error, stackTrace: stackTrace, tag: tag);
   }
 
   /// Log a message at level [Level.info].
@@ -105,8 +113,10 @@ class Logger {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
+    String? tag,
   }) {
-    log(Level.info, message, time: time, error: error, stackTrace: stackTrace);
+    log(Level.info, message,
+        time: time, error: error, stackTrace: stackTrace, tag: tag);
   }
 
   /// Log a message at level [Level.warning].
@@ -115,9 +125,10 @@ class Logger {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
+    String? tag,
   }) {
     log(Level.warning, message,
-        time: time, error: error, stackTrace: stackTrace);
+        time: time, error: error, stackTrace: stackTrace, tag: tag);
   }
 
   /// Log a message at level [Level.error].
@@ -126,8 +137,10 @@ class Logger {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
+    String? tag,
   }) {
-    log(Level.error, message, time: time, error: error, stackTrace: stackTrace);
+    log(Level.error, message,
+        time: time, error: error, stackTrace: stackTrace, tag: tag);
   }
 
   /// Log a message at level [Level.wtf].
@@ -138,8 +151,9 @@ class Logger {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
+    String? tag,
   }) {
-    f(message, time: time, error: error, stackTrace: stackTrace);
+    f(message, time: time, error: error, stackTrace: stackTrace, tag: tag);
   }
 
   /// Log a message at level [Level.fatal].
@@ -148,8 +162,10 @@ class Logger {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
+    String? tag,
   }) {
-    log(Level.fatal, message, time: time, error: error, stackTrace: stackTrace);
+    log(Level.fatal, message,
+        time: time, error: error, stackTrace: stackTrace, tag: tag);
   }
 
   /// Log a message with [level].
@@ -159,6 +175,7 @@ class Logger {
     DateTime? time,
     Object? error,
     StackTrace? stackTrace,
+    String? tag,
   }) {
     if (!_active) {
       throw ArgumentError('Logger has already been closed.');
@@ -177,6 +194,8 @@ class Logger {
       time: time,
       error: error,
       stackTrace: stackTrace,
+      // individual log tag has higher priority than Logger tag
+      tag: tag ?? _tag,
     );
     for (var callback in _logCallbacks) {
       callback(logEvent);

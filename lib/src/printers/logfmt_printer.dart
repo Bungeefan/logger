@@ -33,6 +33,9 @@ class LogfmtPrinter extends LogPrinter {
     if (event.error != null) {
       output.write(' error="${event.error}"');
     }
+    if (event.tag != null) {
+      output.write(' tag="${event.tag}"');
+    }
 
     return [output.toString()];
   }
